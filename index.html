@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IMAGECARE · Dashboard Ejecutivo · MEDI SCAN 2026</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:#f0ede6;color:#1a1a1a;font-size:14px;}
+
+.page{max-width:980px;margin:0 auto;padding:28px 24px 60px;}
+
+/* HEADER */
+.header{background:#1a1a0e;border-radius:14px;padding:26px 32px;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;}
+.brand{font-size:24px;font-weight:800;color:#EF9F27;letter-spacing:.07em;}
+.brand-sub{font-size:11px;color:#888780;margin-top:3px;}
+.header-right{text-align:right;}
+.header-client{font-size:13px;color:#ccccaa;font-weight:600;}
+.header-date{font-size:11px;color:#5F5E5A;margin-top:2px;}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:20px;flex-wrap:wrap;}
+.tab{padding:9px 18px;border-radius:8px;border:1.5px solid #dddbd0;background:#fff;font-size:12px;font-weight:600;color:#5F5E5A;cursor:pointer;transition:all .2s;}
+.tab:hover{background:#eceae2;border-color:#c0bdb5;}
+.tab.active{background:#1a1a0e;border-color:#1a1a0e;color:#EF9F27;}
+
+.panel{display:none;animation:fadeIn .3s ease;}
+.panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECTION LABEL */
+.sec{font-size:10px;font-weight:700;color:#888780;letter-spacing:.1em;text-transform:uppercase;margin:0 0 10px;}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px;}
+.kpi{background:#eceae2;border-radius:8px;padding:14px 14px;}
+.kpi-v{font-size:22px;font-weight:800;color:#1a1a1a;}
+.kpi-v.g{color:#0F6E56;}
+.kpi-l{font-size:11px;color:#5F5E5A;margin-top:4px;line-height:1.4;}
+
+/* CARDS */
+.card{background:#fff;border:1px solid #dddbd0;border-radius:12px;padding:20px 22px;margin-bottom:12px;}
+.card.featured{border:2px solid #1D9E75;}
+.card-t{font-size:13px;font-weight:700;color:#1a1a1a;margin-bottom:14px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px;}
+
+/* BADGES */
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 9px;border-radius:5px;}
+.bg{background:#E1F5EE;color:#085041;}
+.br{background:#FCEBEB;color:#791F1F;}
+.ba{background:#FAEEDA;color:#633806;}
+.bgr{background:#eceae2;color:#5F5E5A;}
+
+/* COV TABLE */
+.cov{width:100%;border-collapse:collapse;}
+.cov th{font-size:10px;font-weight:700;color:#888780;padding:8px 10px;border-bottom:1.5px solid #dddbd0;text-align:left;}
+.cov th.c{text-align:center;}
+.cov th.gc{color:#085041;text-align:center;}
+.cov td{font-size:12px;color:#5F5E5A;padding:7px 10px;border-bottom:1px solid #f0ede6;vertical-align:middle;}
+.cov td.c{text-align:center;}
+.cov .sep{font-size:10px;font-weight:700;color:#5F5E5A;letter-spacing:.05em;text-transform:uppercase;background:#f5f3ee;padding:6px 10px;}
+
+/* BAR CHART */
+.bar-row{display:flex;align-items:center;gap:12px;margin-bottom:14px;}
+.bar-lbl{font-size:11px;color:#5F5E5A;width:155px;flex-shrink:0;line-height:1.3;}
+.bar-track{flex:1;background:#eceae2;border-radius:5px;height:30px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:5px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;transition:width 1s ease;}
+.bar-fill.gy{background:#888780;}
+.bar-fill.gn{background:#1D9E75;}
+.bar-amt{font-size:11px;font-weight:700;color:#fff;}
+
+/* SLA */
+.sla-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px;}
+.sla-item{background:#eceae2;border-radius:8px;padding:12px 6px;text-align:center;}
+.sla-v{font-size:17px;font-weight:800;color:#0F6E56;}
+.sla-l{font-size:10px;color:#5F5E5A;margin-top:3px;line-height:1.3;}
+
+/* VALUE ITEMS */
+.vi{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid #f0ede6;font-size:12px;}
+.vi:last-child{border-bottom:none;}
+.vi-icon{color:#1D9E75;font-weight:900;font-size:14px;margin-top:1px;flex-shrink:0;}
+.vi-icon.red{color:#A32D2D;}
+.vi-t{color:#5F5E5A;line-height:1.5;}
+.vi-t strong{color:#1a1a1a;}
+
+/* HIGHLIGHT */
+.hl{background:#E1F5EE;border:1px solid #9FE1CB;border-radius:8px;padding:14px 16px;margin-top:12px;}
+.hl-t{font-size:12px;font-weight:700;color:#085041;margin-bottom:3px;}
+.hl-b{font-size:12px;color:#0F6E56;line-height:1.5;}
+
+/* WARN */
+.wn{background:#FAEEDA;border:1px solid #EF9F27;border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+.wn-t{font-size:12px;font-weight:700;color:#633806;margin-bottom:3px;}
+.wn-b{font-size:12px;color:#854F0B;line-height:1.5;}
+
+/* CERT */
+.cert-row{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #f0ede6;font-size:12px;}
+.cert-row:last-child{border-bottom:none;}
+.ck{color:#1D9E75;font-weight:900;flex-shrink:0;}
+.cl{color:#5F5E5A;}
+.cl strong{color:#1a1a1a;}
+
+/* QUOTE */
+.quote{background:#1a1a0e;border-radius:10px;padding:22px 26px;margin-top:20px;}
+.quote-t{font-size:13px;color:#EF9F27;font-style:italic;line-height:1.7;}
+.quote-a{font-size:11px;color:#888780;margin-top:8px;}
+
+/* FOOTER */
+.footer{display:flex;justify-content:space-between;align-items:center;padding-top:16px;border-top:1px solid #dddbd0;margin-top:24px;}
+.f-brand{font-size:12px;font-weight:700;color:#EF9F27;}
+.f-contact{font-size:11px;color:#888780;text-align:right;}
+
+/* ANIMATE ON SCROLL */
+.fade-in{opacity:0;transform:translateY(12px);transition:opacity .5s ease,transform .5s ease;}
+.fade-in.visible{opacity:1;transform:none;}
+
+/* PROGRESS RINGS */
+.ring-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.ring-lbl{font-size:11px;color:#5F5E5A;text-align:center;line-height:1.3;}
+svg.ring{transform:rotate(-90deg);}
+.ring-track{fill:none;stroke:#eceae2;stroke-width:8;}
+.ring-fill{fill:none;stroke:#1D9E75;stroke-width:8;stroke-linecap:round;stroke-dasharray:251;stroke-dashoffset:251;transition:stroke-dashoffset 1.4s ease;}
+.ring-val{font-size:15px;font-weight:800;fill:#0F6E56;}
+
+@media(max-width:640px){
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .two,.three{grid-template-columns:1fr;}
+  .sla-grid{grid-template-columns:repeat(3,1fr);}
+  .header{flex-direction:column;gap:10px;}
+  .header-right{text-align:left;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div>
+      <div class="brand">IMAGECARE</div>
+      <div class="brand-sub">Ingeniería detrás de cada imagen · Compromiso detrás de cada vida</div>
+    </div>
+    <div class="header-right">
+      <div class="header-client">Dashboard Ejecutivo · MEDI SCAN</div>
+      <div class="header-date">Mayo 2026 · Confidencial</div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('resumen')">Resumen</button>
+    <button class="tab" onclick="showTab('cobertura')">Cobertura por equipo</button>
+    <button class="tab" onclick="showTab('valor')">Valor diferencial</button>
+    <button class="tab" onclick="showTab('sla')">SLA &amp; Gestión</button>
+    <button class="tab" onclick="showTab('equipo')">Nuestro equipo</button>
+  </div>
+
+  <!-- ═══ PANEL: RESUMEN ═══ -->
+  <div id="panel-resumen" class="panel active">
+    <div class="sec">Resumen ejecutivo</div>
+    <div class="kpi-grid">
+      <div class="kpi fade-in"><div class="kpi-v g">$49.920</div><div class="kpi-l">Inversión anual total — parque completo (sin IVA)</div></div>
+      <div class="kpi fade-in"><div class="kpi-v">4 equipos</div><div class="kpi-l">CT · RM · RX · AW — todos cubiertos</div></div>
+      <div class="kpi fade-in"><div class="kpi-v g">≥ 95%</div><div class="kpi-l">Uptime operativo garantizado</div></div>
+      <div class="kpi fade-in"><div class="kpi-v g">≤ 2h</div><div class="kpi-l">Presencia física ante falla crítica</div></div>
+    </div>
+
+    <div class="sec" style="margin-top:8px;">Inversión anual comparada (USD)</div>
+    <div class="card fade-in">
+      <div class="bar-row">
+        <div class="bar-lbl">Oferta de referencia<br><span style="font-size:10px;color:#888780;">(CT + AW solamente)</span></div>
+        <div class="bar-track"><div class="bar-fill gy" id="bar1" style="width:0%"><span class="bar-amt">$41.823</span></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-lbl">IMAGECARE<br><span style="font-size:10px;color:#1D9E75;">Parque completo</span></div>
+        <div class="bar-track"><div class="bar-fill gn" id="bar2" style="width:0%"><span class="bar-amt">$49.920</span></div></div>
+      </div>
+      <div class="hl">
+        <div class="hl-t">Diferencia: USD 8.097/año</div>
+        <div class="hl-b">Cubre RM (4 PM + correctivo ilimitado), RX completo, reportes KPI y RCA — equipos que la oferta de referencia deja sin preventivos.</div>
+      </div>
+    </div>
+
+    <div class="sec" style="margin-top:8px;">Métricas de rendimiento garantizadas</div>
+    <div class="card fade-in" style="display:flex;justify-content:space-around;flex-wrap:wrap;gap:16px;padding:24px;">
+      <div class="ring-wrap">
+        <svg class="ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle class="ring-track" cx="45" cy="45" r="40"/>
+          <circle class="ring-fill" id="ring1" cx="45" cy="45" r="40"/>
+          <text x="45" y="47" text-anchor="middle" dominant-baseline="middle" transform="rotate(90,45,45)" class="ring-val">95%</text>
+        </svg>
+        <div class="ring-lbl">Uptime<br>garantizado</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle class="ring-track" cx="45" cy="45" r="40"/>
+          <circle class="ring-fill" id="ring2" cx="45" cy="45" r="40" style="stroke:#EF9F27;"/>
+          <text x="45" y="47" text-anchor="middle" dominant-baseline="middle" transform="rotate(90,45,45)" class="ring-val" style="fill:#854F0B;">≤30'</text>
+        </svg>
+        <div class="ring-lbl">Respuesta<br>remota</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle class="ring-track" cx="45" cy="45" r="40"/>
+          <circle class="ring-fill" id="ring3" cx="45" cy="45" r="40"/>
+          <text x="45" y="47" text-anchor="middle" dominant-baseline="middle" transform="rotate(90,45,45)" class="ring-val">≤2h</text>
+        </svg>
+        <div class="ring-lbl">Presencia<br>física</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring" width="90" height="90" viewBox="0 0 90 90">
+          <circle class="ring-track" cx="45" cy="45" r="40"/>
+          <circle class="ring-fill" id="ring4" cx="45" cy="45" r="40"/>
+          <text x="45" y="47" text-anchor="middle" dominant-baseline="middle" transform="rotate(90,45,45)" class="ring-val">≤24h</text>
+        </svg>
+        <div class="ring-lbl">Diagnóstico<br>inicial</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL: COBERTURA ═══ -->
+  <div id="panel-cobertura" class="panel">
+    <div class="wn">
+      <div class="wn-t">El punto diferencial clave para MEDI SCAN</div>
+      <div class="wn-b">La oferta de referencia del mercado no contempla mantenimiento preventivo para la RM GE Signa Pioneer 3T ni ninguna cobertura para el RX Fujifilm FDR Smart. IMAGECARE cubre todos los equipos de forma integral bajo un solo contrato.</div>
+    </div>
+    <div class="card">
+      <table class="cov">
+        <thead>
+          <tr><th>Equipo / Servicio</th><th class="c">Oferta mercado</th><th class="gc">IMAGECARE</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="sep" colspan="3">CT GE Revolution EVO</td></tr>
+          <tr><td>Mantenimiento preventivo (PM)</td><td class="c"><span class="badge ba">12 PM/año</span></td><td class="c"><span class="badge bg">4 PM/año</span></td></tr>
+          <tr><td>Mantenimiento correctivo</td><td class="c"><span class="badge bg">Ilimitado</span></td><td class="c"><span class="badge bg">Ilimitado</span></td></tr>
+          <tr><td class="sep" colspan="3">RM GE Signa Pioneer 3T</td></tr>
+          <tr><td>Mantenimiento preventivo (PM)</td><td class="c"><span class="badge br">No incluido</span></td><td class="c"><span class="badge bg">4 PM/año</span></td></tr>
+          <tr><td>Mantenimiento correctivo</td><td class="c"><span class="badge bg">Ilimitado</span></td><td class="c"><span class="badge bg">Ilimitado</span></td></tr>
+          <tr><td class="sep" colspan="3">Rayos X Fujifilm FDR Smart</td></tr>
+          <tr><td>Preventivo + correctivo completo</td><td class="c"><span class="badge br">No incluido</span></td><td class="c"><span class="badge bg">Completo</span></td></tr>
+          <tr><td class="sep" colspan="3">AW Server · Workstation · SenoIris</td></tr>
+          <tr><td>Preventivo + correctivo completo</td><td class="c"><span class="badge bg">Sí</span></td><td class="c"><span class="badge bg">Sí</span></td></tr>
+          <tr><td class="sep" colspan="3">Gestión y reportería</td></tr>
+          <tr><td>Reportes KPI · RCA · Asesoría repuestos</td><td class="c"><span class="badge br">No incluido</span></td><td class="c"><span class="badge bg">Incluido</span></td></tr>
+          <tr><td>Repuestos incluidos</td><td class="c"><span class="badge br">No</span></td><td class="c"><span class="badge br">No</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="sec" style="margin-top:6px;">¿Por qué 4 PM/año en el CT es el estándar técnico correcto?</div>
+    <div class="three">
+      <div class="card">
+        <div class="card-t">Estándar de fabricante</div>
+        <div style="font-size:12px;color:#5F5E5A;line-height:1.6;">GE Healthcare establece <strong style="color:#1a1a1a;">4 PM anuales</strong> como frecuencia recomendada para el Revolution EVO. La frecuencia trimestral cubre todos los ciclos críticos.</div>
+      </div>
+      <div class="card">
+        <div class="card-t">Correctivo ilimitado incluido</div>
+        <div style="font-size:12px;color:#5F5E5A;line-height:1.6;">Cualquier evento entre PM se atiende sin costo adicional. La protección depende de la <strong style="color:#1a1a1a;">respuesta inmediata</strong>, no de la cantidad de visitas preventivas.</div>
+      </div>
+      <div class="card">
+        <div class="card-t">Impacto en horas productivas</div>
+        <div style="font-size:12px;color:#5F5E5A;line-height:1.6;margin-bottom:12px;">Cada mantenimiento preventivo implica horas en que el equipo <strong style="color:#1a1a1a;">no está produciendo</strong>. La frecuencia importa:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">
+          <div style="background:#FCEBEB;border-radius:8px;padding:10px 12px;text-align:center;">
+            <div style="font-size:11px;color:#791F1F;font-weight:700;margin-bottom:4px;">Oferta de referencia</div>
+            <div style="font-size:18px;font-weight:800;color:#A32D2D;">30h/año</div>
+            <div style="font-size:10px;color:#A32D2D;margin-top:2px;">12 visitas × 2–3h c/u</div>
+          </div>
+          <div style="background:#E1F5EE;border-radius:8px;padding:10px 12px;text-align:center;">
+            <div style="font-size:11px;color:#085041;font-weight:700;margin-bottom:4px;">IMAGECARE</div>
+            <div style="font-size:18px;font-weight:800;color:#0F6E56;">18h/año</div>
+            <div style="font-size:10px;color:#0F6E56;margin-top:2px;">4 visitas × 4–5h c/u</div>
+          </div>
+        </div>
+        <div style="background:#eceae2;border-radius:7px;padding:9px 12px;font-size:12px;color:#1a1a1a;line-height:1.5;">
+          Con IMAGECARE, el CT tiene <strong>12 horas más disponibles para producir</strong> al año — equivalente a <strong>1,5 días adicionales de operación</strong> — gracias a menos interrupciones y mantenimientos de mayor duración y profundidad técnica, tal como recomienda el fabricante GE Healthcare.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL: VALOR ═══ -->
+  <div id="panel-valor" class="panel">
+    <div class="two">
+      <div class="card">
+        <div class="card-t" style="color:#A32D2D;">Riesgos sin preventivo de la RM Signa Pioneer 3T</div>
+        <div class="vi"><span class="vi-icon red">✕</span><div class="vi-t"><strong>Fallas no detectadas a tiempo</strong> — La RM 3T requiere verificación periódica del sistema criogénico, gradientes y RF. Sin PM, las fallas se detectan cuando el equipo ya está fuera de servicio.</div></div>
+        <div class="vi"><span class="vi-icon red">✕</span><div class="vi-t"><strong>Impacto directo en ingresos</strong> — Una parada no planificada puede representar pérdidas de USD 500–800 por día en estudios no realizados y reprogramaciones.</div></div>
+        <div class="vi"><span class="vi-icon red">✕</span><div class="vi-t"><strong>Correctivo sin historial previo</strong> — Sin PM documentado, el diagnóstico correctivo es más lento y costoso.</div></div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Con IMAGECARE</strong> — 4 PM anuales incluyen verificación criogénica, calibración de gradientes, QA de imagen y revisión de sistemas de seguridad.</div></div>
+      </div>
+      <div class="card featured">
+        <div class="card-t">Por USD 8.097 adicionales al año, MEDI SCAN obtiene</div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>4 PM anuales de la RM GE Signa Pioneer 3T</strong> — el equipo más crítico y de mayor valor clínico del centro</div></div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Cobertura completa del RX Fujifilm FDR Smart</strong> — preventivo y correctivo ilimitado</div></div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Un solo contrato para todo el parque</strong> — sin múltiples proveedores ni brechas de cobertura</div></div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Reportes ejecutivos trimestrales + RCA</strong> — visibilidad total para decisiones de CAPEX</div></div>
+        <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Ingenieros senior certificados por GE Healthcare</strong> — formación internacional verificable</div></div>
+        <div class="hl">
+          <div class="hl-t">El costo de una sola parada no planificada de la RM</div>
+          <div class="hl-b">puede superar en pocas horas la diferencia de inversión anual entre ambas propuestas.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROI CALCULATOR -->
+    <div class="card">
+      <div class="card-t">Calculadora de impacto — parada no planificada de la RM</div>
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px;">
+        <label style="font-size:12px;color:#5F5E5A;">Estudios/día:</label>
+        <input type="range" id="estudios" min="5" max="30" value="12" step="1" style="width:160px;">
+        <span id="estudios-out" style="font-size:14px;font-weight:700;color:#1a1a1a;min-width:30px;">12</span>
+        <label style="font-size:12px;color:#5F5E5A;margin-left:12px;">Ingreso/estudio (USD):</label>
+        <input type="range" id="ingreso" min="100" max="600" value="300" step="10" style="width:160px;">
+        <span id="ingreso-out" style="font-size:14px;font-weight:700;color:#1a1a1a;min-width:50px;">$300</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;">
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi-v" id="roi-dia" style="color:#A32D2D;">$3.600</div>
+          <div class="kpi-l">Pérdida por día parado</div>
+        </div>
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi-v" id="roi-sem" style="color:#A32D2D;">$25.200</div>
+          <div class="kpi-l">Pérdida en 1 semana</div>
+        </div>
+        <div class="kpi" style="text-align:center;">
+          <div class="kpi-v g" id="roi-dif">2.2 días</div>
+          <div class="kpi-l">Para igualar diferencia IMAGECARE</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL: SLA ═══ -->
+  <div id="panel-sla" class="panel">
+    <div class="sec">Acuerdo de nivel de servicio</div>
+    <div class="card">
+      <div class="sla-grid">
+        <div class="sla-item"><div class="sla-v">≥95%</div><div class="sla-l">Uptime<br>operativo</div></div>
+        <div class="sla-item"><div class="sla-v">≤30'</div><div class="sla-l">Respuesta<br>remota</div></div>
+        <div class="sla-item"><div class="sla-v">≤2h</div><div class="sla-l">Presencia<br>física</div></div>
+        <div class="sla-item"><div class="sla-v">≤24h</div><div class="sla-l">Diagnóstico<br>inicial</div></div>
+        <div class="sla-item"><div class="sla-v">24–48h</div><div class="sla-l">Resolución<br>crítica</div></div>
+      </div>
+      <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Reportes ejecutivos trimestrales</strong> con KPIs operativos por equipo — uptime real, intervenciones, tendencias</div></div>
+      <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Análisis de Causa Raíz (RCA)</strong> documentado por cada evento correctivo — acciones preventivas derivadas</div></div>
+      <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Validación técnica de repuestos</strong> antes de cada compra, sin costo adicional — evita incompatibilidades y pérdida de inversión</div></div>
+      <div class="vi"><span class="vi-icon">✓</span><div class="vi-t"><strong>Recomendaciones CAPEX / OPEX</strong> — planificación informada de inversiones a largo plazo</div></div>
+    </div>
+    <div class="sec" style="margin-top:6px;">Gestión de riesgos</div>
+    <div class="card">
+      <table class="cov">
+        <thead><tr><th>Riesgo identificado</th><th>Impacto potencial</th><th class="gc">Mitigación IMAGECARE</th></tr></thead>
+        <tbody>
+          <tr><td>Fallas no detectadas a tiempo</td><td>Paradas imprevistas, atención afectada</td><td>PM estructurado + monitoreo continuo</td></tr>
+          <tr><td>Tiempos de respuesta lentos</td><td>Aumento del tiempo de inactividad</td><td>SLA: respuesta ≤30 min · presencia ≤2h</td></tr>
+          <tr><td>Fallas recurrentes sin análisis</td><td>Costos elevados, equipos inestables</td><td>RCA documentado + acciones correctivas</td></tr>
+          <tr><td>Compras inadecuadas de repuestos</td><td>Pérdida de inversión, incompatibilidades</td><td>Validación técnica previa a cada compra</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ═══ PANEL: EQUIPO ═══ -->
+  <div id="panel-equipo" class="panel">
+    <div class="two">
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#085041;flex-shrink:0;">HM</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1a1a1a;">Hernán Maldonado Fajardo</div>
+            <div style="font-size:11px;color:#5F5E5A;">Co-fundador · Ingeniero Senior DI</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#5F5E5A;margin-bottom:12px;line-height:1.5;">Ing. Electrónico (U. del Azuay) · Máster Gestión de Mantenimiento (2016) · +15 años en equipos GE</div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>RM GE Healthcare</strong> — Milwaukee, EE.UU.</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>Shimming Pasivo 3T</strong> — São Paulo, Brasil</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>CT GE Revolution EVO</strong> — Wuxi, China</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>Arcos en C digitales</strong> — Santiago, Chile</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl">+60 certificaciones GE Healthcare (MyLearning)</span></div>
+      </div>
+      <div class="card">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+          <div style="width:48px;height:48px;border-radius:50%;background:#E1F5EE;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;color:#085041;flex-shrink:0;">DZ</div>
+          <div>
+            <div style="font-size:14px;font-weight:700;color:#1a1a1a;">Daniel Zhunio Maldonado</div>
+            <div style="font-size:11px;color:#5F5E5A;">Co-fundador · Ingeniero Senior DI</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#5F5E5A;margin-bottom:12px;line-height:1.5;">Ing. Electrónico (ESPOL) · +11 años en modalidades avanzadas: PET/CT, SPECT, RM, CT, RX</div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>GE PETtrace Cyclotron</strong> — Uppsala, Suecia</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>ECAM-Scintron Gamma Camera</strong> — MiE, Alemania</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>Oficial Seguridad Radiológica</strong> — 480h (Fisika Medica)</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl"><strong>Protección Radiológica</strong> — Min. Energía Ecuador</span></div>
+        <div class="cert-row"><span class="ck">✓</span><span class="cl">+86 certificaciones GE Healthcare</span></div>
+      </div>
+    </div>
+
+    <div class="card" style="text-align:center;padding:16px 20px;">
+      <div class="sec" style="margin-bottom:12px;">Modalidades cubiertas por el equipo</div>
+      <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;">
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">PET/CT</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">RM / MR</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">Tomografía CT</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">Rayos X</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">Mamografía</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">SPECT</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">Densitometría</span>
+        <span class="badge bg" style="font-size:11px;padding:5px 12px;">Ciclotrón</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote">
+    <div class="quote-t">"Elegir IMAGECARE es incorporar un socio estratégico que cuida sus equipos con el mismo nivel de exigencia con que usted cuida a sus pacientes. No solo respondemos cuando algo falla — trabajamos para que no falle."</div>
+    <div class="quote-a">IMAGECARE · Guayaquil, mayo 2026</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="f-brand">IMAGECARE · Ingeniería detrás de cada imagen</div>
+    <div class="f-contact">hernan.maldonado@image-care.com · +593 99 880 9993 · Cuenca, Ecuador</div>
+  </div>
+
+</div>
+
+<script>
+function showTab(name){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+  setTimeout(()=>{
+    animateFadeIns();
+    if(name==='resumen') animateBars();
+    if(name==='resumen') animateRings();
+  }, 50);
+}
+
+function animateFadeIns(){
+  document.querySelectorAll('.fade-in').forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('visible'),i*80);
+  });
+}
+
+function animateBars(){
+  setTimeout(()=>{
+    document.getElementById('bar1').style.width='83.9%';
+    document.getElementById('bar2').style.width='100%';
+  },200);
+}
+
+function animateRings(){
+  const configs=[
+    {id:'ring1',pct:.95,color:'#1D9E75'},
+    {id:'ring2',pct:.88,color:'#EF9F27'},
+    {id:'ring3',pct:.92,color:'#1D9E75'},
+    {id:'ring4',pct:.90,color:'#1D9E75'},
+  ];
+  configs.forEach(({id,pct,color},i)=>{
+    setTimeout(()=>{
+      const el=document.getElementById(id);
+      el.style.strokeDashoffset = 251-(251*pct);
+      el.style.stroke=color;
+    },300+i*150);
+  });
+}
+
+// ROI Calculator
+function updateROI(){
+  const est=parseInt(document.getElementById('estudios').value);
+  const ing=parseInt(document.getElementById('ingreso').value);
+  document.getElementById('estudios-out').textContent=est;
+  document.getElementById('ingreso-out').textContent='$'+ing;
+  const dia=est*ing;
+  const sem=dia*7;
+  const diasParaIgualar=(8097/dia).toFixed(1);
+  document.getElementById('roi-dia').textContent='$'+dia.toLocaleString('es-EC');
+  document.getElementById('roi-sem').textContent='$'+sem.toLocaleString('es-EC');
+  document.getElementById('roi-dif').textContent=diasParaIgualar+' días';
+}
+
+document.getElementById('estudios').addEventListener('input',updateROI);
+document.getElementById('ingreso').addEventListener('input',updateROI);
+
+// Init
+setTimeout(()=>{
+  animateFadeIns();
+  animateBars();
+  animateRings();
+},300);
+</script>
+</body>
+</html>
